@@ -2,13 +2,14 @@ package model;
 
 public class Board {
 	
-	//----------------------------------------------------- Attributes
+	//------------------------------------------------------------- Attributes
 	private NodeDL head;
 	private NodeDL tail;
 	private int COLUMNS;
 	private int ROWS;
+	private Dice dice;
 	
-	//----------------------------------------------------- Getters and Setters
+	//------------------------------------------------------------- Getters and Setters
 	public NodeDL getHead() {
 		return head;
 	}
@@ -22,11 +23,15 @@ public class Board {
 	public int getROWS() {
 		return ROWS;
 	}
+	public Dice getDice() {
+		return dice;
+	}
 	
-	//----------------------------------------------------- Constructor
+	//------------------------------------------------------------- Constructor
 	public Board(int c, int r) {
 		this.COLUMNS = c;
 		this.ROWS = r;
+		this.dice = new Dice();
 		
 		// generate board squares (NodeDL)
 		for(int i = 0; i < (COLUMNS*ROWS); i++) {
@@ -37,7 +42,7 @@ public class Board {
 		head.setP(new Player("j"));
 	}
 	
-	//----------------------------------------------------- Methods
+	//-------------------------------------------------------------- Methods
 	
 	/*
 	 * addMethod
@@ -64,6 +69,10 @@ public class Board {
 		return theBoard;
 	}
 	
+	/*
+	 * toPrint
+	 * Method that return all the board status information
+	 */
 	private String toPrint(NodeDL current, String s) {
 		if(current == null) {
 			s+="";
@@ -75,5 +84,15 @@ public class Board {
 			}
 		}
 		return s;
+	}
+	
+	/*
+	 * throwDice
+	 * Method that return a random number with the dice
+	 */
+	public String throwDice() {
+		String total = "";
+		total += ""+(int)dice.getTotal();
+		return total;
 	}
 }

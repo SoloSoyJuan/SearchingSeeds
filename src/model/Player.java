@@ -19,6 +19,10 @@ public class Player {
 		this.name = name;
 	}
 	
+	/*
+	 * to Print
+	 * Method that return information of the Player
+	 */
 	public String toPrint() {
 		return name;
 	}

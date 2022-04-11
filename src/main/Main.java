@@ -32,7 +32,8 @@ public class Main {
 	//----------------------------------------------------- Methods
 	
 	/*
-	 * 
+	 * mainMenu
+	 * Method that show the options of the game and return the user option
 	 */
 	public static int mainMenu() {
 		int option = 0;
@@ -46,12 +47,13 @@ public class Main {
 	}
 	
 	/*
-	 * 
+	 * option
+	 * Method that redirect to other methods depending on the user's choice
 	 */
 	public static void option(int options) {
 		switch(options) {
 			case 1:
-				
+				System.out.println(throwDice());
 				break;
 			case 2:
 				System.out.println(printBoard());
@@ -64,9 +66,21 @@ public class Main {
 		}
 	}
 	
+	/*
+	 * printBoard
+	 * Method that print board status information
+	 */
 	public static String printBoard() {
 		String theBoard = "";
 		theBoard = board.toPrint();
 		return theBoard;
+	}
+	
+	/*
+	 * throwDice
+	 * Method that return a random number with the dice of the board
+	 */
+	public static String throwDice() {
+		return board.throwDice();
 	}
 }
