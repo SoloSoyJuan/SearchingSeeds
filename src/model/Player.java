@@ -13,4 +13,13 @@ public class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	//----------------------------------------------------- Constructor
+	public Player(String name) {
+		this.name = name;
+	}
+	
+	public String toPrint() {
+		return name;
+	}
 }

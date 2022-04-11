@@ -29,12 +29,20 @@ public class Board {
 		this.ROWS = r;
 		
 		// generate board squares (NodeDL)
-		for(int i = 0; i > (r*c); i--) {
+		for(int i = 0; i < (COLUMNS*ROWS); i++) {
 			addNode(new NodeDL(""+(i+1), null));
 		}
+		
+		// set the player in the first square
+		head.setP(new Player("j"));
 	}
 	
 	//----------------------------------------------------- Methods
+	
+	/*
+	 * addMethod
+	 * Method that add a new node to the board in the last position
+	 */
 	private void addNode(NodeDL node) {
 		if(tail == null) {
 			head = node;
@@ -43,5 +51,29 @@ public class Board {
 			node.setPrev(tail);
 		}
 		tail = node;
+	}
+	
+	/*
+	 * toString
+	 * Method that return a String with the board status
+	 */
+	public String toPrint() {
+		String theBoard = "";
+		
+		theBoard = toPrint(head, theBoard);
+		return theBoard;
+	}
+	
+	private String toPrint(NodeDL current, String s) {
+		if(current == null) {
+			s+="";
+		}else {
+			if(current.getP() != null) {
+				s += "["+current.getP().toPrint()+"] "+ toPrint(current.getNext(), s);
+			}else {
+				s += "["+current.getNum()+"] "+ toPrint(current.getNext(), s);
+			}
+		}
+		return s;
 	}
 }
