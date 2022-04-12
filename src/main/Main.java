@@ -53,7 +53,8 @@ public class Main {
 	public static void option(int options) {
 		switch(options) {
 			case 1:
-				System.out.println(throwDice());
+				System.out.println("Dice: " + throwDice());
+				System.out.println(printBoard());
 				break;
 			case 2:
 				System.out.println(printBoard());

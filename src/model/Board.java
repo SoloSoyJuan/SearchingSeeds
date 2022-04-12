@@ -89,10 +89,28 @@ public class Board {
 	/*
 	 * throwDice
 	 * Method that return a random number with the dice
+	 * And work as a trigger of moveSquares method
 	 */
 	public String throwDice() {
 		String total = "";
 		total += ""+(int)dice.getTotal();
+		moveSquares(Integer.parseInt(total), head);
 		return total;
+	}
+	
+	/*
+	 * moveSquares
+	 * Method that move the player in the board depending on the dice
+	 */
+	private void moveSquares(int theDice, NodeDL node) {
+		if(theDice == 0 || node.getNext() == null) {
+			return;
+		}else if(node.getP() != null) {
+			Player p = node.getP();
+			node.getNext().setP(p);
+			node.setP(null);
+			theDice--;
+		}
+		moveSquares(theDice, node.getNext());
 	}
 }
