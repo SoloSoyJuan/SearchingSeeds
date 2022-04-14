@@ -28,7 +28,7 @@ public class Board {
 	}
 	
 	//------------------------------------------------------------- Constructor
-	public Board(int c, int r) {
+	public Board(int c, int r, String p1, String p2, int portals) { // portals doesn`t work yet
 		this.COLUMNS = c;
 		this.ROWS = r;
 		this.dice = new Dice();
@@ -39,7 +39,8 @@ public class Board {
 		}
 		
 		// set the player in the first square
-		head.setP(new Player("j"));
+		head.setP(new Player("R", p1));
+		tail.setP(new Player("M", p2));
 	}
 	
 	//-------------------------------------------------------------- Methods

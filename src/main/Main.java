@@ -12,14 +12,21 @@ public class Main {
 	public static void main(String[] args) {
 		int selection;
 		
+		System.out.println("\nType the name of player #1 (Rick)");
+		String player1 = s.nextLine();
+		System.out.println("\nType the name of player #2 (Morty)");
+		String player2 = s.nextLine();
 		System.out.println("\nType the number of columns");
 		int c = s.nextInt();
 		s.nextLine();
 		System.out.println("\nType the number of rows");
 		int r = s.nextInt();
 		s.nextLine();
+		System.out.println("\nType the number of portas, remember that have to be less than " +(0.5*(c*r)));
+		int p = s.nextInt();
+		s.nextLine();
 		
-		board = new Board(c, r);
+		board = new Board(c, r, player1, player2, p);
 		
 		do {
 			selection = mainMenu();
