@@ -4,19 +4,11 @@ public class Board {
 	
 	//------------------------------------------------------------- Attributes
 	private NodeDL head;
-	private NodeDL tail;
 	private int COLUMNS;
 	private int ROWS;
 	private Dice dice;
 	
 	//------------------------------------------------------------- Getters and Setters
-	public NodeDL getHead() {
-		return head;
-	}
-	public void setHead(NodeDL head) {
-		this.head = head;
-	}
-	
 	public int getCOLUMNS() {
 		return COLUMNS;
 	}
@@ -34,13 +26,11 @@ public class Board {
 		this.dice = new Dice();
 		
 		// generate board squares (NodeDL)
-		for(int i = 0; i < (COLUMNS*ROWS); i++) {
-			addNode(new NodeDL(""+(i+1), null));
-		}
+		generateBoard();
 		
 		// set the player in the first square
-		head.setP(new Player("R", p1));
-		tail.setP(new Player("M", p2));
+		head.setPlayer(new Player("R", p1));
+		//head.setPlayer(new Player("M", p2));
 	}
 	
 	//-------------------------------------------------------------- Methods
@@ -50,13 +40,31 @@ public class Board {
 	 * Method that add a new node to the board in the last position
 	 */
 	private void addNode(NodeDL node) {
-		if(tail == null) {
+		if(head == null) {
 			head = node;
+			head.setNext(head);
+			head.setPrev(head);
 		}else {
+			NodeDL tail = head.getPrev();
 			tail.setNext(node);
 			node.setPrev(tail);
+			
+			node.setNext(head);
+			head.setPrev(node);
+			
+			head = node;
 		}
-		tail = node;
+	}
+	
+	/*
+	 * generateBoard
+	 * Method that generated all the squares of the board
+	 */
+	private void generateBoard() {
+		// for to generated the board squares (NodeDL)
+		for(int i = (COLUMNS*ROWS); i > 0; i--) {
+			addNode(new NodeDL(""+(i)));
+		}
 	}
 	
 	/*
@@ -75,8 +83,12 @@ public class Board {
 	 * Method that return all the board status information
 	 */
 	private String toPrint(NodeDL current, String s) {
-		if(current == null) {
-			s+="";
+		if(current.getNext() == head) {
+			if(current.getP() != null) {
+				s += "["+current.getP().toPrint()+"]";
+			}else {
+				s += "["+current.getNum()+"]";
+			}
 		}else {
 			if(current.getP() != null) {
 				s += "["+current.getP().toPrint()+"] "+ toPrint(current.getNext(), s);
@@ -108,8 +120,8 @@ public class Board {
 			return;
 		}else if(node.getP() != null) {
 			Player p = node.getP();
-			node.getNext().setP(p);
-			node.setP(null);
+			node.getNext().setPlayer(p);
+			node.setPlayer(null);
 			theDice--;
 		}
 		moveSquares(theDice, node.getNext());

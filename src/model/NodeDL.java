@@ -5,10 +5,11 @@ public class NodeDL {
 	//----------------------------------------------------- Attributes
 	private String num;
 	private Player p;
+	private Player p2;
 	private NodeDL prev;
 	private NodeDL next;
 	private NodeDL linked;
-	private int seed;
+	private boolean seed;
 	
 	//----------------------------------------------------- Getters and Setters
 	public String getNum() {
@@ -20,8 +21,14 @@ public class NodeDL {
 	public Player getP() {
 		return p;
 	}
-	public void setP(Player p) {
+	private void setP(Player p) {
 		this.p = p;
+	}
+	public Player getP2() {
+		return p2;
+	}
+	private void setP2(Player p2) {
+		this.p2 = p2;
 	}
 	public NodeDL getPrev() {
 		return prev;
@@ -41,15 +48,22 @@ public class NodeDL {
 	public void setLinked(NodeDL linked) {
 		this.linked = linked;
 	}
-	public int getSeed() {
+	public boolean getSeed() {
 		return seed;
 	}
-	public void setSeed(int seed) {
+	public void setSeed(boolean seed) {
 		this.seed = seed;
 	}
 	//----------------------------------------------------- Constructor
-	public NodeDL(String num, Player p) {
+	public NodeDL(String num) {
 		this.num = num;
-		this.p = p;
+	}
+	
+	public void setPlayer(Player p) {
+		if(this.p == null) {
+			setP(p);
+		}else {
+			setP2(p);
+		}
 	}
 }

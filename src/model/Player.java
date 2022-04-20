@@ -41,4 +41,12 @@ public class Player {
 	public String toPrint() {
 		return name;
 	}
+	
+	/*
+	 * addNewSeed
+	 * Method that add a new seed to the collectedSeeds
+	 */
+	public void addNewSeed() {
+		setCollectedSeeds(collectedSeeds+1);
+	}
 }

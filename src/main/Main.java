@@ -22,7 +22,7 @@ public class Main {
 		System.out.println("\nType the number of rows");
 		int r = s.nextInt();
 		s.nextLine();
-		System.out.println("\nType the number of portas, remember that have to be less than " +(0.5*(c*r)));
+		System.out.println("\nType the number of portals, remember that have to be less than " +(0.5*(c*r)));
 		int p = s.nextInt();
 		s.nextLine();
 		
