@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Board {
 	
 	//------------------------------------------------------------- Attributes
@@ -29,8 +31,8 @@ public class Board {
 		generateBoard();
 		
 		// set the player in the first square
-		head.setPlayer(new Player("R", p1));
-		//head.setPlayer(new Player("M", p2));
+		head.setP(new Player("R", p1));
+		head.setP(new Player("M", p2));
 	}
 	
 	//-------------------------------------------------------------- Methods
@@ -84,14 +86,14 @@ public class Board {
 	 */
 	private String toPrint(NodeDL current, String s) {
 		if(current.getNext() == head) {
-			if(current.getP() != null) {
-				s += "["+current.getP().toPrint()+"]";
+			if(current.getP().size() != 0) {
+				s += "["+current.getP().get(0).toPrint()+"]";
 			}else {
 				s += "["+current.getNum()+"]";
 			}
 		}else {
-			if(current.getP() != null) {
-				s += "["+current.getP().toPrint()+"] "+ toPrint(current.getNext(), s);
+			if(current.getP().size() != 0) {
+				s += "["+current.getP().get(0).toPrint()+"] "+ toPrint(current.getNext(), s);
 			}else {
 				s += "["+current.getNum()+"] "+ toPrint(current.getNext(), s);
 			}
@@ -104,10 +106,10 @@ public class Board {
 	 * Method that return a random number with the dice
 	 * And work as a trigger of moveSquares method
 	 */
-	public String throwDice() {
+	public String throwDice(String turn) {
 		String total = "";
 		total += ""+(int)dice.getTotal();
-		moveSquares(Integer.parseInt(total), head);
+		moveSquares(Integer.parseInt(total), head, turn);
 		return total;
 	}
 	
@@ -115,15 +117,20 @@ public class Board {
 	 * moveSquares
 	 * Method that move the player in the board depending on the dice
 	 */
-	private void moveSquares(int theDice, NodeDL node) {
-		if(theDice == 0 || node.getNext() == null) {
+	private void moveSquares(int theDice, NodeDL node, String turn) {
+		if(theDice == 0) {
 			return;
-		}else if(node.getP() != null) {
-			Player p = node.getP();
-			node.getNext().setPlayer(p);
-			node.setPlayer(null);
-			theDice--;
+		}else if(node.getP().size() != 0) {
+			ArrayList<Player> p = node.getP();
+			for(int i = 0; i < p.size(); i++) {
+				if(p.get(i).getName().equals(turn)) {
+					Player player = p.get(i);
+					node.getNext().setP(player);
+					node.getP().remove(player);
+					theDice--;
+				}
+			}
 		}
-		moveSquares(theDice, node.getNext());
+		moveSquares(theDice, node.getNext(), turn);
 	}
 }

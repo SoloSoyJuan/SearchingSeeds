@@ -10,7 +10,8 @@ public class Main {
 	public static Board board;
 	
 	public static void main(String[] args) {
-		int selection;
+		int selection =2;
+		String turn = "R";
 		
 		System.out.println("\nType the name of player #1 (Rick)");
 		String player1 = s.nextLine();
@@ -29,8 +30,13 @@ public class Main {
 		board = new Board(c, r, player1, player2, p);
 		
 		do {
-			selection = mainMenu();
-			option(selection);
+			if(turn.equals("M") && selection == 1) {
+				turn = "R";
+			}else if(turn.equals("R") && selection == 1){
+				turn = "M";
+			}
+			selection = mainMenu(turn);
+			option(selection, turn);
 			
 		}while(selection != 0);
 
@@ -42,11 +48,13 @@ public class Main {
 	 * mainMenu
 	 * Method that show the options of the game and return the user option
 	 */
-	public static int mainMenu() {
+	public static int mainMenu(String turn) {
 		int option = 0;
-		System.out.println("\n****** ******"+
+		System.out.println("\n****** turn of "+turn+" ******"+
 						   "\n(1) Roll dice"+
 						   "\n(2) See board"+
+						   "\n(3) See portals"+
+						   "\n(4) See points"+
 						   "\n(0) Exit");
 		option = s.nextInt();
 		s.nextLine();
@@ -57,14 +65,18 @@ public class Main {
 	 * option
 	 * Method that redirect to other methods depending on the user's choice
 	 */
-	public static void option(int options) {
+	public static void option(int options, String turn) {
 		switch(options) {
 			case 1:
-				System.out.println("Dice: " + throwDice());
+				System.out.println("Dice: " + throwDice(turn));
 				System.out.println(printBoard());
 				break;
 			case 2:
 				System.out.println(printBoard());
+				break;
+			case 3:
+				break;
+			case 4:
 				break;
 			case 0:
 				break;
@@ -88,7 +100,7 @@ public class Main {
 	 * throwDice
 	 * Method that return a random number with the dice of the board
 	 */
-	public static String throwDice() {
-		return board.throwDice();
+	public static String throwDice(String turn) {
+		return board.throwDice(turn);
 	}
 }

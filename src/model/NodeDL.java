@@ -1,11 +1,12 @@
 package model;
 
+import java.util.ArrayList;
+
 public class NodeDL {
 	
 	//----------------------------------------------------- Attributes
 	private String num;
-	private Player p;
-	private Player p2;
+	private ArrayList<Player> p = new ArrayList<>();
 	private NodeDL prev;
 	private NodeDL next;
 	private NodeDL linked;
@@ -18,17 +19,11 @@ public class NodeDL {
 	public void setNum(String num) {
 		this.num = num;
 	}
-	public Player getP() {
+	public ArrayList<Player> getP() {
 		return p;
 	}
-	private void setP(Player p) {
-		this.p = p;
-	}
-	public Player getP2() {
-		return p2;
-	}
-	private void setP2(Player p2) {
-		this.p2 = p2;
+	public void setP(Player p) {
+		this.p.add(p);
 	}
 	public NodeDL getPrev() {
 		return prev;
@@ -57,13 +52,5 @@ public class NodeDL {
 	//----------------------------------------------------- Constructor
 	public NodeDL(String num) {
 		this.num = num;
-	}
-	
-	public void setPlayer(Player p) {
-		if(this.p == null) {
-			setP(p);
-		}else {
-			setP2(p);
-		}
 	}
 }
