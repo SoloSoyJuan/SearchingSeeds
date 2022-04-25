@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class NodeDL {
 	
 	//----------------------------------------------------- Attributes
-	private String num;
+	private int num;
 	private ArrayList<Player> p = new ArrayList<>();
 	private NodeDL prev;
 	private NodeDL next;
@@ -13,16 +13,16 @@ public class NodeDL {
 	private boolean seed;
 	
 	//----------------------------------------------------- Getters and Setters
-	public String getNum() {
+	public int getNum() {
 		return num;
 	}
-	public void setNum(String num) {
+	public void setNum(int num) {
 		this.num = num;
 	}
 	public ArrayList<Player> getP() {
 		return p;
 	}
-	public void setP(Player p) {
+	public void addP(Player p) {
 		this.p.add(p);
 	}
 	public NodeDL getPrev() {
@@ -50,7 +50,7 @@ public class NodeDL {
 		this.seed = seed;
 	}
 	//----------------------------------------------------- Constructor
-	public NodeDL(String num) {
+	public NodeDL(int num) {
 		this.num = num;
 	}
 }

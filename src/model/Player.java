@@ -1,11 +1,12 @@
 package model;
 
-public class Player {
+public class Player implements Comparable<Player>{
 	
 	//------------------------------------------------------ Attributes
 	private String name;
 	private String pName;
 	private int collectedSeeds;
+	private int score;
 	
 	//------------------------------------------------------ Getters and Setters
 	public String getName() {
@@ -15,18 +16,31 @@ public class Player {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getPName() {
 		return pName;
 	}
+
 	public void setPName(String pName) {
 		this.pName = pName;
 	}
-	public int getCollecteSeeds() {
+
+	public int getCollectedSeeds() {
 		return collectedSeeds;
 	}
+
 	public void setCollectedSeeds(int collectedSeeds) {
 		this.collectedSeeds = collectedSeeds;
 	}
+
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	//----------------------------------------------------- Constructor
 	public Player(String name, String pName) {
 		this.name = name;
@@ -48,5 +62,18 @@ public class Player {
 	 */
 	public void addNewSeed() {
 		setCollectedSeeds(collectedSeeds+1);
+	}
+
+	@Override
+	public int compareTo(Player B) {
+		Player A = this;
+
+		int scoreOutput = A.score - B.score;
+
+		if (scoreOutput == 0) {
+			return A.name.compareTo(B.name);
+		} else {
+			return scoreOutput;
+		}
 	}
 }

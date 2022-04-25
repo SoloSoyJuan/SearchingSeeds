@@ -1,22 +1,20 @@
 package model;
 
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 
 public class Board {
 	
 	//------------------------------------------------------------- Attributes
 	private NodeDL head;
-	private int COLUMNS;
-	private int ROWS;
-	private Dice dice;
+	public final int COLUMNS;
+	public final int ROWS;
+	private final Dice dice;
+	private NodeDL printNode;
 	
 	//------------------------------------------------------------- Getters and Setters
-	public int getCOLUMNS() {
-		return COLUMNS;
-	}
-	public int getROWS() {
-		return ROWS;
-	}
+
 	public Dice getDice() {
 		return dice;
 	}
@@ -29,10 +27,12 @@ public class Board {
 		
 		// generate board squares (NodeDL)
 		generateBoard();
+
+		this.printNode = head;
 		
 		// set the player in the first square
-		head.setP(new Player("R", p1));
-		head.setP(new Player("M", p2));
+		head.addP(new Player("R", p1));
+		head.addP(new Player("M", p2));
 	}
 	
 	//-------------------------------------------------------------- Methods
@@ -63,9 +63,9 @@ public class Board {
 	 * Method that generated all the squares of the board
 	 */
 	private void generateBoard() {
-		// for to generated the board squares (NodeDL)
+		// to generate the board squares (NodeDL)
 		for(int i = (COLUMNS*ROWS); i > 0; i--) {
-			addNode(new NodeDL(""+(i)));
+			addNode(new NodeDL(i));
 		}
 	}
 	
@@ -98,6 +98,66 @@ public class Board {
 				s += "["+current.getNum()+"] "+ toPrint(current.getNext(), s);
 			}
 		}
+
+		return s;
+	}
+
+	/**
+	 * Prints the board in the form of a snake
+	 * @return the String representing the layout of the board
+	 */
+	public String print(){
+		String board = "";
+
+		for (int i = 0; i < ROWS; i++) {
+			String s = generateRow(printNode, "");
+
+			if (i % 2 == 0) {
+				board += s + "\n";
+			} else {
+
+				StringBuilder reverser = new StringBuilder();
+				String reverseRow = "";
+
+				for (int j = s.length() - 1; j >= 0; j--) {
+
+					reverser.append(s.charAt(j));
+
+					if (s.charAt(j) == '[') {
+						reverser.reverse();
+						reverseRow += reverser;
+						reverser = new StringBuilder();
+					}
+				}
+
+				board += reverseRow + "\n";
+			}
+		}
+
+		return board;
+	}
+
+	private String generateRow(NodeDL current, String s) {
+		if(current.getNum() % COLUMNS == 0) {
+			if(current.getP().size() == 1) {
+				s += "["+current.getP().get(0).toPrint()+"] ";
+			}else if(current.getP().size() == 2){
+				s += "[B] ";
+			} else {
+				s += "["+current.getNum()+"] ";
+			}
+
+			printNode = current.getNext();
+		}else {
+			if(current.getP().size() == 1) {
+				s += "["+current.getP().get(0).toPrint()+"] "+ generateRow(current.getNext(), s);
+			}else if (current.getP().size() == 2){
+				s += "[B] "+ generateRow(current.getNext(), s);
+			} else {
+				s += "["+current.getNum()+"] "+ generateRow(current.getNext(), s);
+			}
+		}
+
 		return s;
 	}
 	
@@ -106,10 +166,10 @@ public class Board {
 	 * Method that return a random number with the dice
 	 * And work as a trigger of moveSquares method
 	 */
-	public String throwDice(String turn) {
-		String total = "";
-		total += ""+(int)dice.getTotal();
-		moveSquares(Integer.parseInt(total), head, turn);
+	public int throwDice(String turn) {
+		int total = 0;
+		total += dice.getTotal();
+		moveSquares(total, head, turn);
 		return total;
 	}
 	
@@ -125,7 +185,7 @@ public class Board {
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
 					Player player = p.get(i);
-					node.getNext().setP(player);
+					node.getNext().addP(player);
 					node.getP().remove(player);
 					theDice--;
 				}

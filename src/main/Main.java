@@ -3,14 +3,20 @@ package main;
 import java.util.Scanner;
 
 import model.Board;
+import model.Player;
+import model.ScoreboardData;
 
 public class Main {
 	
 	public static Scanner s = new Scanner(System.in);
 	public static Board board;
+	public static ScoreboardData scoreboardData = new ScoreboardData();
 	
 	public static void main(String[] args) {
-		int selection =2;
+		scoreboardData.loadJSON();
+
+		int mainSelection = 0;
+		int selection = 0;
 		String turn = "R";
 		
 		System.out.println("\nType the name of player #1 (Rick)");
@@ -23,26 +29,61 @@ public class Main {
 		System.out.println("\nType the number of rows");
 		int r = s.nextInt();
 		s.nextLine();
-		System.out.println("\nType the number of portals, remember that have to be less than " +(0.5*(c*r)));
-		int p = s.nextInt();
+
+		int maxPortals = (int) (0.5*(c*r));
+		int portals = 0;
+
+		do {
+			System.out.println("\nType the number of portals, remember that they have to be less than " + maxPortals);
+			portals = s.nextInt();
+		} while (portals >= maxPortals);
+
 		s.nextLine();
 		
-		board = new Board(c, r, player1, player2, p);
-		
+		board = new Board(c, r, player1, player2, portals);
+
 		do {
-			if(turn.equals("M") && selection == 1) {
-				turn = "R";
-			}else if(turn.equals("R") && selection == 1){
-				turn = "M";
+			mainSelection = otherMenu();
+
+			if (mainSelection == 1) {
+
+				do {
+					if(turn.equals("M") && selection == 1) {
+						turn = "R";
+					}else if(turn.equals("R") && selection == 1){
+						turn = "M";
+					}
+					selection = mainMenu(turn);
+					option(selection, turn);
+
+				} while(selection != 0);
+
+			} else if (mainSelection == 2) {
+				System.out.println("\n" + scoreboardData.print());
+				System.out.println("Press enter to continue...");
+				s.nextLine();
 			}
-			selection = mainMenu(turn);
-			option(selection, turn);
-			
-		}while(selection != 0);
+		} while (mainSelection != 0);
+		
+
 
 	}
 	
 	//----------------------------------------------------- Methods
+
+	public static int otherMenu() {
+		int selection = 0;
+
+		System.out.println("\n-----------------------------------------------\n");
+		System.out.println("(1) Start the game");
+		System.out.println("(2) View Scoreboard");
+		System.out.println("(0) Exit");
+		System.out.println("\n-----------------------------------------------\n");
+
+		selection = s.nextInt();
+		s.nextLine();
+		return selection;
+	}
 	
 	/*
 	 * mainMenu
@@ -55,7 +96,7 @@ public class Main {
 						   "\n(2) See board"+
 						   "\n(3) See portals"+
 						   "\n(4) See points"+
-						   "\n(0) Exit");
+						   "\n(0) Exit the game");
 		option = s.nextInt();
 		s.nextLine();
 		return option;
@@ -70,9 +111,13 @@ public class Main {
 			case 1:
 				System.out.println("Dice: " + throwDice(turn));
 				System.out.println(printBoard());
+				System.out.println("\nPress enter to continue...");
+				s.nextLine();
 				break;
 			case 2:
-				System.out.println(printBoard());
+				System.out.println("\nB = Both players\nM = Morty\nR = Rick\n\n" + printBoard());
+				System.out.println("Press enter to continue...");
+				s.nextLine();
 				break;
 			case 3:
 				break;
@@ -81,7 +126,9 @@ public class Main {
 			case 0:
 				break;
 			default:
-				System.out.println("\nNot valid option");
+				System.out.println("\nInvalid option");
+				System.out.println("\nPress enter to continue...");
+				s.nextLine();
 				break;
 		}
 	}
@@ -92,7 +139,7 @@ public class Main {
 	 */
 	public static String printBoard() {
 		String theBoard = "";
-		theBoard = board.toPrint();
+		theBoard = board.print();
 		return theBoard;
 	}
 	
@@ -100,7 +147,7 @@ public class Main {
 	 * throwDice
 	 * Method that return a random number with the dice of the board
 	 */
-	public static String throwDice(String turn) {
+	public static int throwDice(String turn) {
 		return board.throwDice(turn);
 	}
 }
