@@ -75,7 +75,7 @@ public class Board {
 		NodeDL position = head;
 		ArrayList<Integer> numbers =  new ArrayList<>();
 		for (int i = 0; i < valueMax; i++) {
-			if(position.getP().size()!=0) {
+			if(position.getP().size()==0) {
 				numbers.add(i);
 			}
 			position = position.getNext();
