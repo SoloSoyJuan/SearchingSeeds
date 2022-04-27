@@ -3,7 +3,6 @@ package main;
 import java.util.Scanner;
 
 import model.Board;
-import model.Player;
 import model.ScoreboardData;
 
 public class Main {
@@ -43,7 +42,7 @@ public class Main {
 		board = new Board(c, r, player1, player2, portals);
 
 		do {
-			mainSelection = otherMenu();
+			mainSelection = mainMenu();
 
 			if (mainSelection == 1) {
 
@@ -53,7 +52,7 @@ public class Main {
 					}else if(turn.equals("R") && selection == 1){
 						turn = "M";
 					}
-					selection = mainMenu(turn);
+					selection = gameMenu(turn);
 					option(selection, turn);
 
 				} while(selection != 0);
@@ -71,7 +70,7 @@ public class Main {
 	
 	//----------------------------------------------------- Methods
 
-	public static int otherMenu() {
+	public static int mainMenu() {
 		int selection = 0;
 
 		System.out.println("\n-----------------------------------------------\n");
@@ -89,7 +88,7 @@ public class Main {
 	 * mainMenu
 	 * Method that show the options of the game and return the user option
 	 */
-	public static int mainMenu(String turn) {
+	public static int gameMenu(String turn) {
 		int option = 0;
 		System.out.println("\n****** turn of "+turn+" ******"+
 						   "\n(1) Roll dice"+
@@ -110,8 +109,8 @@ public class Main {
 		switch(options) {
 			case 1:
 				System.out.println("Dice: " + throwDice(turn));
-				System.out.println(printBoard());
-				System.out.println("\nPress enter to continue...");
+				System.out.println("\nB = Both players\nM = Morty\nR = Rick\n\n" + printBoard());
+				System.out.println("Press enter to continue...");
 				s.nextLine();
 				break;
 			case 2:

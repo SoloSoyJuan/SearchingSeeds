@@ -32,6 +32,7 @@ public class Board {
 		// set the player in the first square
 		head.addP(new Player("R", p1));
 		head.addP(new Player("M", p2));
+		randomLinked(portals);
 	}
 	
 	//-------------------------------------------------------------- Methods
@@ -41,27 +42,36 @@ public class Board {
 	 */
 	public void randomLinked(int numLinkeds){
 		int valueMax = head.getPrev().getNum();
+		NodeDL position = head;
 		ArrayList<Integer> numbers =  new ArrayList<>();
 		for (int i = 0; i < valueMax; i++) {
-			numbers.add(i);
+			if(position.getP().size()!=0) {
+				numbers.add(i);
+			}
+			position = position.getNext();
 		}
+		char letter = 'A';
 		while(numLinkeds>=0) {
-			int x = (int) Math.random()*valueMax;
+			int x = (int) (Math.random()*numbers.size());
+			int xx = numbers.get(x);
 			numbers.remove(x);
-			valueMax--;
-			int y = (int) Math.random()*valueMax;
+			int y = (int) (Math.random()*numbers.size());
+			int yy = numbers.get(y);
 			numbers.remove(y);
-			valueMax--;
 			NodeDL prevX = head;
 			NodeDL prevY = head;
-			for(int i = 0; i<x; i++) {
-				prevX.getNext();
+			for(int i = 0; i<xx; i++) {
+				prevX = prevX.getNext();
 			}
-			for(int i = 0; i<y; i++) {
-				prevY.getNext();
+			for(int i = 0; i<yy; i++) {
+				prevY = prevY.getNext();
 			}
+			prevX.setLetter(letter+"");
+			prevY.setLetter(letter+"");
 			prevX.setLinked(prevY);
 			prevY.setLinked(prevX);
+			numLinkeds--;
+			letter++;
 		}
 	}
 	
@@ -95,39 +105,6 @@ public class Board {
 		for(int i = (COLUMNS*ROWS); i > 0; i--) {
 			addNode(new NodeDL(i));
 		}
-	}
-	
-	/*
-	 * toString
-	 * Method that return a String with the board status
-	 */
-	public String toPrint() {
-		String theBoard = "";
-		
-		theBoard = toPrint(head, theBoard);
-		return theBoard;
-	}
-	
-	/*
-	 * toPrint
-	 * Method that return all the board status information
-	 */
-	private String toPrint(NodeDL current, String s) {
-		if(current.getNext() == head) {
-			if(current.getP().size() != 0) {
-				s += "["+current.getP().get(0).toPrint()+"]";
-			}else {
-				s += "["+current.getNum()+"]";
-			}
-		}else {
-			if(current.getP().size() != 0) {
-				s += "["+current.getP().get(0).toPrint()+"] "+ toPrint(current.getNext(), s);
-			}else {
-				s += "["+current.getNum()+"] "+ toPrint(current.getNext(), s);
-			}
-		}
-
-		return s;
 	}
 
 	/**
@@ -206,10 +183,17 @@ public class Board {
 	 * Method that move the player in the board depending on the dice
 	 */
 	private void moveSquares(int theDice, NodeDL node, String turn) {
+		ArrayList<Player> p = node.getP();
 		if(theDice == 0) {
+			for(int i = 0; i < p.size(); i++) {
+				if(p.get(i).getName().equals(turn)) {
+					Player player = p.get(i);
+					node.getLinked().addP(player);
+					node.getP().remove(player);
+				}
+			}
 			return;
 		}else if(node.getP().size() != 0) {
-			ArrayList<Player> p = node.getP();
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
 					Player player = p.get(i);

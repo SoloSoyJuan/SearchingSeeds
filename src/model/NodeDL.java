@@ -11,6 +11,7 @@ public class NodeDL {
 	private NodeDL next;
 	private NodeDL linked;
 	private boolean seed;
+	private String letter;
 	
 	//----------------------------------------------------- Getters and Setters
 	public int getNum() {
@@ -49,6 +50,14 @@ public class NodeDL {
 	public void setSeed(boolean seed) {
 		this.seed = seed;
 	}
+	public String getLetter() {
+		return letter;
+	}
+
+	public void setLetter(String letter) {
+		this.letter = letter;
+	}
+
 	//----------------------------------------------------- Constructor
 	public NodeDL(int num) {
 		this.num = num;
