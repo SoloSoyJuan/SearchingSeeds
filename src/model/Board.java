@@ -1,6 +1,5 @@
 package model;
 
-import javafx.util.*;
 import java.util.*;
 
 public class Board {
@@ -11,11 +10,18 @@ public class Board {
 	public final int ROWS;
 	private final Dice dice;
 	private NodeDL printNode;
+	private int totalSeeds;
 	
 	//------------------------------------------------------------- Getters and Setters
 
 	public Dice getDice() {
 		return dice;
+	}
+	public int getTotalSeeds() {
+		return totalSeeds;
+	}
+	public void setTotalSeeds(int totalSeeds) {
+		this.totalSeeds = totalSeeds;
 	}
 	
 	//------------------------------------------------------------- Constructor
@@ -23,9 +29,12 @@ public class Board {
 		this.COLUMNS = c;
 		this.ROWS = r;
 		this.dice = new Dice();
+		this.totalSeeds = randomNumber((COLUMNS*ROWS), 1);
 		
 		// generate board squares (NodeDL)
 		generateBoard();
+		
+		putSeedsOnSquares(head, totalSeeds, randomNumber((COLUMNS*ROWS), 1));
 
 		this.printNode = head;
 		
@@ -35,6 +44,27 @@ public class Board {
 	}
 	
 	//-------------------------------------------------------------- Methods
+	
+	private int randomNumber(int max, int min) {
+		int result = 0;
+		result = (int) Math.floor(Math.random()*(max-min+1)+min);
+		return result;
+	}
+	
+	public void putSeedsOnSquares(NodeDL current,int seeds, int squares) {
+		if(seeds == 0) {
+			return;
+		}else if(squares < 0) {
+			squares = randomNumber((COLUMNS*ROWS),1);
+		}else if(squares == 0){
+			if(!current.getSeed()) {
+				current.setSeed(true);
+				seeds--;
+			}
+		}
+		putSeedsOnSquares(current.getNext(), seeds, --squares);
+	}
+	
 	/**
 	 * Creates a portal between two nodes
 	 * @param numLinkeds
@@ -171,7 +201,9 @@ public class Board {
 				s += "["+current.getP().get(0).toPrint()+"] ";
 			}else if(current.getP().size() == 2){
 				s += "[B] ";
-			} else {
+			}else if(current.getSeed()) {
+				s += "[*] ";
+			}else {
 				s += "["+current.getNum()+"] ";
 			}
 
@@ -181,7 +213,9 @@ public class Board {
 				s += "["+current.getP().get(0).toPrint()+"] "+ generateRow(current.getNext(), s);
 			}else if (current.getP().size() == 2){
 				s += "[B] "+ generateRow(current.getNext(), s);
-			} else {
+			}else if(current.getSeed()) {
+				s += "[*] "+ generateRow(current.getNext(), s);
+			}else {
 				s += "["+current.getNum()+"] "+ generateRow(current.getNext(), s);
 			}
 		}
