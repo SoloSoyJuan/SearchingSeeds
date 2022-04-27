@@ -123,7 +123,9 @@ public class Main {
 				System.out.println("Press enter to continue...");
 				s.nextLine();
 				break;
-			case 4:
+			case 4://tener player 1 y 2
+				System.out.println("R: "+board.colletedSeedsPlayer("R"));
+				System.out.println("M: "+board.colletedSeedsPlayer("M"));
 				break;
 			case 0:
 				break;

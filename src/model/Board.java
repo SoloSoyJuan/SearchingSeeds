@@ -25,7 +25,7 @@ public class Board {
 	}
 	
 	//------------------------------------------------------------- Constructor
-	public Board(int c, int r, String p1, String p2, int portals) { // portals doesn`t work yet
+	public Board(int c, int r, String p1, String p2, int portals) {
 		this.COLUMNS = c;
 		this.ROWS = r;
 		this.dice = new Dice();
@@ -65,7 +65,32 @@ public class Board {
 		}
 		putSeedsOnSquares(current.getNext(), seeds, --squares);
 	}
-	
+
+	public int colletedSeedsPlayer(String name){
+		boolean found = false;
+		NodeDL nd = head;
+		int score = 0;
+		while (found==false){
+			if(nd.getP().size()!=0){
+				if(nd.getP().size() == 1) {
+					if (nd.getP().get(0).getName().equals(name)){
+						score = nd.getP().get(0).getCollectedSeeds();
+						found=true;
+					}
+				} else
+					if (nd.getP().get(0).getName().equals(name)){
+						score = nd.getP().get(0).getCollectedSeeds();
+						found=true;
+					} else if (nd.getP().get(1).getName().equals(name)){
+						score = nd.getP().get(1).getCollectedSeeds();
+						found=true;
+					}
+				}
+			nd = nd.getNext();
+			}
+		return score;
+	}
+
 	/**
 	 * Creates a portal between two nodes
 	 * @param numLinkeds
@@ -242,8 +267,15 @@ public class Board {
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
 					Player player = p.get(i);
-					node.getLinked().addP(player);
-					node.getP().remove(player);
+					if (node.getLinked()!=null){
+						node.getLinked().addP(player);
+						node.getP().remove(player);
+						if (node.getLinked().getSeed()){
+							int numSeeds = player.getCollectedSeeds()+1;
+							player.setCollectedSeeds(numSeeds);
+							node.getLinked().setSeed(false);
+						}
+					}
 				}
 			}
 			return;

@@ -61,5 +61,6 @@ public class NodeDL {
 	//----------------------------------------------------- Constructor
 	public NodeDL(int num) {
 		this.num = num;
+		seed = false;
 	}
 }
