@@ -109,16 +109,19 @@ public class Main {
 		switch(options) {
 			case 1:
 				System.out.println("Dice: " + throwDice(turn));
-				System.out.println("\nB = Both players\nM = Morty\nR = Rick\n\n" + printBoard());
+				System.out.println("\nB = Both players\nM = Morty\nR = Rick\n\n" + printBoard(1));
 				System.out.println("Press enter to continue...");
 				s.nextLine();
 				break;
 			case 2:
-				System.out.println("\nB = Both players\nM = Morty\nR = Rick\n\n" + printBoard());
+				System.out.println("\nB = Both players\nM = Morty\nR = Rick\n\n" + printBoard(1));
 				System.out.println("Press enter to continue...");
 				s.nextLine();
 				break;
 			case 3:
+				System.out.println(printBoard(2));
+				System.out.println("Press enter to continue...");
+				s.nextLine();
 				break;
 			case 4:
 				break;
@@ -136,9 +139,9 @@ public class Main {
 	 * printBoard
 	 * Method that print board status information
 	 */
-	public static String printBoard() {
+	public static String printBoard(int x) {
 		String theBoard = "";
-		theBoard = board.print();
+		theBoard = board.print(x);
 		return theBoard;
 	}
 	

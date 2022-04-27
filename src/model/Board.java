@@ -81,7 +81,7 @@ public class Board {
 			position = position.getNext();
 		}
 		char letter = 'A';
-		while(numLinkeds>=0) {
+		while(numLinkeds>0) {
 			int x = (int) (Math.random()*numbers.size());
 			int xx = numbers.get(x);
 			numbers.remove(x);
@@ -124,6 +124,7 @@ public class Board {
 			
 			head = node;
 		}
+		node.setLetter(" ");
 	}
 	
 	/*
@@ -139,13 +140,20 @@ public class Board {
 
 	/**
 	 * Prints the board in the form of a snake
+	 * @param x defines what type of board is built, whether people with seeds, or just portals
 	 * @return the String representing the layout of the board
 	 */
-	public String print(){
+	public String print(int x){
 		String board = "";
 
 		for (int i = 0; i < ROWS; i++) {
-			String s = generateRow(printNode, "");
+			String s = "";
+			if (x==1){
+				s = generateRow(printNode, "");
+			} else{
+				s= generateRowPortals(printNode, "");
+			}
+
 
 			if (i % 2 == 0) {
 				board += s + "\n";
@@ -170,6 +178,18 @@ public class Board {
 		}
 
 		return board;
+	}
+
+
+	private String generateRowPortals(NodeDL current, String s){
+		if(current.getNum() % COLUMNS == 0) {
+			s += "["+current.getLetter()+"] ";
+
+			printNode = current.getNext();
+		} else {
+			s += "["+current.getLetter()+"] "+ generateRowPortals(current.getNext(), s);
+		}
+		return s;
 	}
 
 	private String generateRow(NodeDL current, String s) {
