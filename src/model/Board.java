@@ -1,8 +1,7 @@
 package model;
 
-import javafx.util.Pair;
-
-import java.util.ArrayList;
+import javafx.util.*;
+import java.util.*;
 
 public class Board {
 	
@@ -36,6 +35,35 @@ public class Board {
 	}
 	
 	//-------------------------------------------------------------- Methods
+	/**
+	 * Creates a portal between two nodes
+	 * @param numLinkeds
+	 */
+	public void randomLinked(int numLinkeds){
+		int valueMax = head.getPrev().getNum();
+		ArrayList<Integer> numbers =  new ArrayList<>();
+		for (int i = 0; i < valueMax; i++) {
+			numbers.add(i);
+		}
+		while(numLinkeds>=0) {
+			int x = (int) Math.random()*valueMax;
+			numbers.remove(x);
+			valueMax--;
+			int y = (int) Math.random()*valueMax;
+			numbers.remove(y);
+			valueMax--;
+			NodeDL prevX = head;
+			NodeDL prevY = head;
+			for(int i = 0; i<x; i++) {
+				prevX.getNext();
+			}
+			for(int i = 0; i<y; i++) {
+				prevY.getNext();
+			}
+			prevX.setLinked(prevY);
+			prevY.setLinked(prevX);
+		}
+	}
 	
 	/*
 	 * addMethod
