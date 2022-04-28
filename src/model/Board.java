@@ -25,11 +25,11 @@ public class Board {
 	}
 	
 	//------------------------------------------------------------- Constructor
-	public Board(int c, int r, String p1, String p2, int portals) {
+	public Board(int c, int r, String p1, String p2, int portals, int seeds) {
 		this.COLUMNS = c;
 		this.ROWS = r;
 		this.dice = new Dice();
-		this.totalSeeds = randomNumber((COLUMNS*ROWS), 1);
+		this.totalSeeds = seeds;
 		
 		// generate board squares (NodeDL)
 		generateBoard();
@@ -39,8 +39,8 @@ public class Board {
 		this.printNode = head;
 		
 		// set the player in the first square
-		head.addP(new Player("R", p1));
-		head.addP(new Player("M", p2));
+		putPlayersOnSquares(head, new Player("R", p1), randomNumber((COLUMNS*ROWS), 1));
+		putPlayersOnSquares(head, new Player("M", p2), randomNumber((COLUMNS*ROWS), 1));
 		randomLinked(portals);
 	}
 	
@@ -64,6 +64,14 @@ public class Board {
 			}
 		}
 		putSeedsOnSquares(current.getNext(), seeds, --squares);
+	}
+	
+	public void putPlayersOnSquares(NodeDL current,Player p, int squares) {
+		if(squares == 0) {
+			current.addP(p);
+			return;
+		}
+		putPlayersOnSquares(current.getNext(), p, --squares);
 	}
 
 	public int colletedSeedsPlayer(String name){
@@ -250,11 +258,18 @@ public class Board {
 	 * Method that return a random number with the dice
 	 * And work as a trigger of moveSquares method
 	 */
-	public int throwDice(String turn) {
+	public int throwDice() {
 		int total = 0;
 		total += dice.getTotal();
-		moveSquares(total, head, turn);
 		return total;
+	}
+	
+	public void moveSquares(int total, String turn, boolean goBack) {
+		if(!goBack) {
+			moveSquares(total, head, turn);
+		}else {
+			moveSquaresBack(total, head, turn);
+		}
 	}
 	
 	/*
@@ -267,14 +282,14 @@ public class Board {
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
 					Player player = p.get(i);
+					if (node.getSeed()){
+						int numSeeds = player.getCollectedSeeds()+1;
+						player.setCollectedSeeds(numSeeds);
+						node.setSeed(false);
+					}
 					if (node.getLinked()!=null){
 						node.getLinked().addP(player);
 						node.getP().remove(player);
-						if (node.getLinked().getSeed()){
-							int numSeeds = player.getCollectedSeeds()+1;
-							player.setCollectedSeeds(numSeeds);
-							node.getLinked().setSeed(false);
-						}
 					}
 				}
 			}
@@ -290,5 +305,40 @@ public class Board {
 			}
 		}
 		moveSquares(theDice, node.getNext(), turn);
+	}
+	
+	/*
+	 * moveSquaresBack
+	 * Method that move the player in the board depending on the dice and player decision
+	 */
+	private void moveSquaresBack(int theDice, NodeDL node, String turn) {
+		ArrayList<Player> p = node.getP();
+		if(theDice == 0) {
+			for(int i = 0; i < p.size(); i++) {
+				if(p.get(i).getName().equals(turn)) {
+					Player player = p.get(i);
+					if (node.getSeed()){
+						int numSeeds = player.getCollectedSeeds()+1;
+						player.setCollectedSeeds(numSeeds);
+						node.setSeed(false);
+					}
+					if (node.getLinked()!=null){
+						node.getLinked().addP(player);
+						node.getP().remove(player);
+					}
+				}
+			}
+			return;
+		}else if(node.getP().size() != 0) {
+			for(int i = 0; i < p.size(); i++) {
+				if(p.get(i).getName().equals(turn)) {
+					Player player = p.get(i);
+					node.getPrev().addP(player);
+					node.getP().remove(player);
+					theDice--;
+				}
+			}
+		}
+		moveSquaresBack(theDice, node.getPrev(), turn);
 	}
 }

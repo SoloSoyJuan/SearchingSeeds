@@ -36,10 +36,17 @@ public class Main {
 			System.out.println("\nType the number of portals, remember that they have to be less than " + maxPortals);
 			portals = s.nextInt();
 		} while (portals >= maxPortals);
+		
+		int seeds = 0;
+		maxPortals -= 2;
+		do {
+			System.out.println("\nType the number of seeds, remember that they have to be less than " + maxPortals);
+			seeds = s.nextInt();
+		} while (seeds < 1 && seeds >= maxPortals);
 
 		s.nextLine();
 		
-		board = new Board(c, r, player1, player2, portals);
+		board = new Board(c, r, player1, player2, portals, seeds);
 
 		do {
 			mainSelection = mainMenu();
@@ -108,7 +115,16 @@ public class Main {
 	public static void option(int options, String turn) {
 		switch(options) {
 			case 1:
-				System.out.println("Dice: " + throwDice(turn));
+				int moves = throwDice();
+				System.out.println("Dice: "+ moves);
+				System.out.println("where to go (1)-forward (2)-backward");
+				int goBack = s.nextInt();
+				s.nextLine();
+				boolean go = false;
+				if(goBack != 1) {
+					go = true;
+				}
+				moveSquares(moves, go, turn);
 				System.out.println("\nB = Both players\nM = Morty\nR = Rick\n\n" + printBoard(1));
 				System.out.println("Press enter to continue...");
 				s.nextLine();
@@ -151,7 +167,11 @@ public class Main {
 	 * throwDice
 	 * Method that return a random number with the dice of the board
 	 */
-	public static int throwDice(String turn) {
-		return board.throwDice(turn);
+	public static int throwDice() {
+		return board.throwDice();
+	}
+	
+	public static void moveSquares(int moves, boolean goBack, String turn) {
+		board.moveSquares(moves, turn, goBack);
 	}
 }
