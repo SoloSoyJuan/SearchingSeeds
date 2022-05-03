@@ -45,7 +45,6 @@ public class Board {
 	}
 	
 	//-------------------------------------------------------------- Methods
-	
 	private int randomNumber(int max, int min) {
 		int result = 0;
 		result = (int) Math.floor(Math.random()*(max-min+1)+min);
@@ -286,6 +285,7 @@ public class Board {
 						int numSeeds = player.getCollectedSeeds()+1;
 						player.setCollectedSeeds(numSeeds);
 						node.setSeed(false);
+						totalSeeds--;
 					}
 					if (node.getLinked()!=null){
 						node.getLinked().addP(player);
@@ -321,6 +321,7 @@ public class Board {
 						int numSeeds = player.getCollectedSeeds()+1;
 						player.setCollectedSeeds(numSeeds);
 						node.setSeed(false);
+						totalSeeds--;
 					}
 					if (node.getLinked()!=null){
 						node.getLinked().addP(player);

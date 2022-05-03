@@ -61,6 +61,10 @@ public class Main {
 					}
 					selection = gameMenu(turn);
 					option(selection, turn);
+					if(!steelSeeds()) {
+						System.out.println("\nGame over: Winner is " + theWinner());
+						selection = 0;
+					}
 
 				} while(selection != 0);
 
@@ -173,5 +177,24 @@ public class Main {
 	
 	public static void moveSquares(int moves, boolean goBack, String turn) {
 		board.moveSquares(moves, turn, goBack);
+	}
+	
+	public static boolean steelSeeds() {
+		int seeds = board.getTotalSeeds();
+		boolean thereAre = false;
+		if(seeds > 0) {
+			thereAre = true;
+		}
+		return thereAre;
+	}
+	
+	public static String theWinner() {
+		String name = "";
+		if(board.colletedSeedsPlayer("R") < board.colletedSeedsPlayer("M")) {
+			name = "M";
+		}else {
+			name = "R";
+		}
+		return name;
 	}
 }
