@@ -6,7 +6,7 @@ public class NodeDL {
 	
 	//----------------------------------------------------- Attributes
 	private int num;
-	private ArrayList<Player> p = new ArrayList<>();
+	private ArrayList<Player> players = new ArrayList<>();
 	private NodeDL prev;
 	private NodeDL next;
 	private NodeDL linked;
@@ -20,11 +20,11 @@ public class NodeDL {
 	public void setNum(int num) {
 		this.num = num;
 	}
-	public ArrayList<Player> getP() {
-		return p;
+	public ArrayList<Player> getPlayers() {
+		return players;
 	}
-	public void addP(Player p) {
-		this.p.add(p);
+	public void addPlayer(Player p) {
+		this.players.add(p);
 	}
 	public NodeDL getPrev() {
 		return prev;

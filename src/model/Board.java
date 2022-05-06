@@ -11,7 +11,7 @@ public class Board {
 	private final Dice dice;
 	private NodeDL printNode;
 	private int totalSeeds;
-	
+
 	//------------------------------------------------------------- Getters and Setters
 
 	public Dice getDice() {
@@ -67,7 +67,7 @@ public class Board {
 	
 	public void putPlayersOnSquares(NodeDL current,Player p, int squares) {
 		if(squares == 0) {
-			current.addP(p);
+			current.addPlayer(p);
 			return;
 		}
 		putPlayersOnSquares(current.getNext(), p, --squares);
@@ -79,18 +79,18 @@ public class Board {
 		Player playerToFind = null;
 
 		while (found==false){
-			if(nd.getP().size()!=0){
-				if(nd.getP().size() == 1) {
-					if (nd.getP().get(0).getName().equals(name)){
-						playerToFind = nd.getP().get(0);
+			if(nd.getPlayers().size()!=0){
+				if(nd.getPlayers().size() == 1) {
+					if (nd.getPlayers().get(0).getName().equals(name)){
+						playerToFind = nd.getPlayers().get(0);
 						found=true;
 					}
 				} else
-					if (nd.getP().get(0).getName().equals(name)){
-						playerToFind = nd.getP().get(0);
+					if (nd.getPlayers().get(0).getName().equals(name)){
+						playerToFind = nd.getPlayers().get(0);
 						found=true;
-					} else if (nd.getP().get(1).getName().equals(name)){
-						playerToFind = nd.getP().get(1);
+					} else if (nd.getPlayers().get(1).getName().equals(name)){
+						playerToFind = nd.getPlayers().get(1);
 						found=true;
 					}
 				}
@@ -109,7 +109,7 @@ public class Board {
 		NodeDL position = head;
 		ArrayList<Integer> numbers =  new ArrayList<>();
 		for (int i = 0; i < valueMax; i++) {
-			if(position.getP().size()==0) {
+			if(position.getPlayers().size()==0) {
 				numbers.add(i);
 			}
 			position = position.getNext();
@@ -228,9 +228,9 @@ public class Board {
 
 	private String generateRow(NodeDL current, String s) {
 		if(current.getNum() % COLUMNS == 0) {
-			if(current.getP().size() == 1) {
-				s += "["+current.getP().get(0).toPrint()+"] ";
-			}else if(current.getP().size() == 2){
+			if(current.getPlayers().size() == 1) {
+				s += "["+current.getPlayers().get(0).toPrint()+"] ";
+			}else if(current.getPlayers().size() == 2){
 				s += "[B] ";
 			}else if(current.getSeed()) {
 				s += "[*] ";
@@ -240,9 +240,9 @@ public class Board {
 
 			printNode = current.getNext();
 		}else {
-			if(current.getP().size() == 1) {
-				s += "["+current.getP().get(0).toPrint()+"] "+ generateRow(current.getNext(), s);
-			}else if (current.getP().size() == 2){
+			if(current.getPlayers().size() == 1) {
+				s += "["+current.getPlayers().get(0).toPrint()+"] "+ generateRow(current.getNext(), s);
+			}else if (current.getPlayers().size() == 2){
 				s += "[B] "+ generateRow(current.getNext(), s);
 			}else if(current.getSeed()) {
 				s += "[*] "+ generateRow(current.getNext(), s);
@@ -278,7 +278,7 @@ public class Board {
 	 * Method that move the player in the board depending on the dice
 	 */
 	private void moveSquares(int theDice, NodeDL node, String turn) {
-		ArrayList<Player> p = node.getP();
+		ArrayList<Player> p = node.getPlayers();
 		if(theDice == 0) {
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
@@ -290,18 +290,18 @@ public class Board {
 						totalSeeds--;
 					}
 					if (node.getLinked()!=null){
-						node.getLinked().addP(player);
-						node.getP().remove(player);
+						node.getLinked().addPlayer(player);
+						node.getPlayers().remove(player);
 					}
 				}
 			}
 			return;
-		}else if(node.getP().size() != 0) {
+		}else if(node.getPlayers().size() != 0) {
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
 					Player player = p.get(i);
-					node.getNext().addP(player);
-					node.getP().remove(player);
+					node.getNext().addPlayer(player);
+					node.getPlayers().remove(player);
 					theDice--;
 				}
 			}
@@ -314,7 +314,7 @@ public class Board {
 	 * Method that move the player in the board depending on the dice and player decision
 	 */
 	private void moveSquaresBack(int theDice, NodeDL node, String turn) {
-		ArrayList<Player> p = node.getP();
+		ArrayList<Player> p = node.getPlayers();
 		if(theDice == 0) {
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
@@ -326,18 +326,18 @@ public class Board {
 						totalSeeds--;
 					}
 					if (node.getLinked()!=null){
-						node.getLinked().addP(player);
-						node.getP().remove(player);
+						node.getLinked().addPlayer(player);
+						node.getPlayers().remove(player);
 					}
 				}
 			}
 			return;
-		}else if(node.getP().size() != 0) {
+		}else if(node.getPlayers().size() != 0) {
 			for(int i = 0; i < p.size(); i++) {
 				if(p.get(i).getName().equals(turn)) {
 					Player player = p.get(i);
-					node.getPrev().addP(player);
-					node.getP().remove(player);
+					node.getPrev().addPlayer(player);
+					node.getPlayers().remove(player);
 					theDice--;
 				}
 			}

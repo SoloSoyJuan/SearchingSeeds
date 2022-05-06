@@ -17,6 +17,6 @@ public class Dice {
 	
 	//----------------------------------------------------- Constructor 
 	public Dice() {
-		getTotal();
+		total = 0.0;
 	}
 }
