@@ -73,29 +73,31 @@ public class Board {
 		putPlayersOnSquares(current.getNext(), p, --squares);
 	}
 
-	public int colletedSeedsPlayer(String name){
+	public Player findPlayer(String name){
 		boolean found = false;
 		NodeDL nd = head;
-		int score = 0;
+		Player playerToFind = null;
+
 		while (found==false){
 			if(nd.getP().size()!=0){
 				if(nd.getP().size() == 1) {
 					if (nd.getP().get(0).getName().equals(name)){
-						score = nd.getP().get(0).getCollectedSeeds();
+						playerToFind = nd.getP().get(0);
 						found=true;
 					}
 				} else
 					if (nd.getP().get(0).getName().equals(name)){
-						score = nd.getP().get(0).getCollectedSeeds();
+						playerToFind = nd.getP().get(0);
 						found=true;
 					} else if (nd.getP().get(1).getName().equals(name)){
-						score = nd.getP().get(1).getCollectedSeeds();
+						playerToFind = nd.getP().get(1);
 						found=true;
 					}
 				}
 			nd = nd.getNext();
-			}
-		return score;
+		}
+
+		return playerToFind;
 	}
 
 	/**

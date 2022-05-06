@@ -1,8 +1,11 @@
 package main;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Scanner;
 
 import model.Board;
+import model.Player;
 import model.ScoreboardData;
 
 public class Main {
@@ -10,7 +13,7 @@ public class Main {
 	public static Scanner s = new Scanner(System.in);
 	public static Board board;
 	public static ScoreboardData scoreboardData = new ScoreboardData();
-	
+
 	public static void main(String[] args) {
 		scoreboardData.loadJSON();
 
@@ -40,15 +43,14 @@ public class Main {
 		int seeds = 0;
 		maxPortals -= 2;
 		do {
-			System.out.println("\nType the number of seeds, remember that they have to be less than " + maxPortals);
+			System.out.println("\nType the number of seeds, remember that they have to be more than " + maxPortals);
 			seeds = s.nextInt();
 		} while (seeds < 1 && seeds >= maxPortals);
 
 		s.nextLine();
-		
-		board = new Board(c, r, player1, player2, portals, seeds);
 
 		do {
+			board = new Board(c, r, player1, player2, portals, seeds);
 			mainSelection = mainMenu();
 
 			if (mainSelection == 1) {
@@ -61,8 +63,12 @@ public class Main {
 					}
 					selection = gameMenu(turn);
 					option(selection, turn);
-					if(!steelSeeds()) {
-						System.out.println("\nGame over: Winner is " + theWinner());
+
+					// Check the winning condition
+					if(!stillSeeds()) {
+						System.out.println("Game over: Winner is " + theWinner());
+						System.out.println("\nPress enter to continue...");
+						s.nextLine();
 						selection = 0;
 					}
 
@@ -100,6 +106,8 @@ public class Main {
 	 * Method that show the options of the game and return the user option
 	 */
 	public static int gameMenu(String turn) {
+		Instant startOfTurn = Instant.now();
+
 		int option = 0;
 		System.out.println("\n****** turn of "+turn+" ******"+
 						   "\n(1) Roll dice"+
@@ -109,6 +117,19 @@ public class Main {
 						   "\n(0) Exit the game");
 		option = s.nextInt();
 		s.nextLine();
+
+		long secondsOfTurn = ChronoUnit.SECONDS.between(startOfTurn, Instant.now());
+		Player actualPlayer;
+
+		// Calculate the seconds played at the moment
+		if (turn.equals("R")) {
+			actualPlayer = board.findPlayer("R");
+			actualPlayer.setSecondsPlayed(actualPlayer.getSecondsPlayed() + secondsOfTurn);
+		} else {
+			actualPlayer = board.findPlayer("M");
+			actualPlayer.setSecondsPlayed(actualPlayer.getSecondsPlayed() + secondsOfTurn);
+		}
+
 		return option;
 	}
 	
@@ -143,9 +164,9 @@ public class Main {
 				System.out.println("Press enter to continue...");
 				s.nextLine();
 				break;
-			case 4://tener player 1 y 2
-				System.out.println("R: "+board.colletedSeedsPlayer("R"));
-				System.out.println("M: "+board.colletedSeedsPlayer("M"));
+			case 4:
+				System.out.println("R: "+board.findPlayer("R").getCollectedSeeds());
+				System.out.println("M: "+board.findPlayer("M").getCollectedSeeds());
 				break;
 			case 0:
 				break;
@@ -179,7 +200,7 @@ public class Main {
 		board.moveSquares(moves, turn, goBack);
 	}
 	
-	public static boolean steelSeeds() {
+	public static boolean stillSeeds() {
 		int seeds = board.getTotalSeeds();
 		boolean thereAre = false;
 		if(seeds > 0) {
@@ -190,11 +211,40 @@ public class Main {
 	
 	public static String theWinner() {
 		String name = "";
-		if(board.colletedSeedsPlayer("R") < board.colletedSeedsPlayer("M")) {
-			name = "M";
+		Player player1 = board.findPlayer("R");
+		Player player2 = board.findPlayer("M");
+		int scoreP1 = 0;
+		int scoreP2 = 0;
+
+		scoreP1 = (player1.getCollectedSeeds() * 120) - (int) player1.getSecondsPlayed();
+		scoreP2 = (player2.getCollectedSeeds() * 120) - (int) player2.getSecondsPlayed();
+
+		player1.setScore(scoreP1);
+		player2.setScore(scoreP2);
+
+		// Checks the collected amount of seeds to determine the winner
+		if (player1.getCollectedSeeds() == player2.getCollectedSeeds()) {
+
+			// Tiebreaker by score
+			if (scoreP1 > scoreP2) {
+				// Adds to scoreboard and gets data
+				name = "Rick | " + player1.getPName() + " | Score: " + scoreP1;
+				scoreboardData.addPlayer(player1);
+			} else {
+				// Adds to scoreboard and gets data
+				name = "Morty | " + player2.getPName() + " | Score: " + scoreP2;
+				scoreboardData.addPlayer(player2);
+			}
+		} else if(player1.getCollectedSeeds() < player2.getCollectedSeeds()) {
+			// Adds to scoreboard and gets data
+			name = "Morty | " + player2.getPName() + " | Score: " + scoreP2;
+			scoreboardData.addPlayer(player2);
 		}else {
-			name = "R";
+			// Adds to scoreboard and gets data
+			name = "Rick | " + player1.getPName() + " | Score: " + scoreP1;
+			scoreboardData.addPlayer(player1);
 		}
+
 		return name;
 	}
 }

@@ -7,6 +7,7 @@ public class Player implements Comparable<Player>{
 	private String pName;
 	private int collectedSeeds;
 	private int score;
+	private long secondsPlayed;
 	
 	//------------------------------------------------------ Getters and Setters
 	public String getName() {
@@ -41,11 +42,20 @@ public class Player implements Comparable<Player>{
 		this.score = score;
 	}
 
+	public long getSecondsPlayed() {
+		return secondsPlayed;
+	}
+
+	public void setSecondsPlayed(long secondsPlayed) {
+		this.secondsPlayed = secondsPlayed;
+	}
+
 	//----------------------------------------------------- Constructor
 	public Player(String name, String pName) {
 		this.name = name;
 		this.pName = pName;
 		this.collectedSeeds = 0;
+		secondsPlayed = 0;
 	}
 	//----------------------------------------------------- Methods
 	/*

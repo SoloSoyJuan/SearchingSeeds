@@ -17,7 +17,8 @@ public class ScoreboardData {
         int playerIndex = binarySearchPlayer(player);
 
         if (playerIndex != -1) {
-            players.set(playerIndex, player);
+            Player foundPlayer = players.get(playerIndex);
+            foundPlayer.setScore(foundPlayer.getScore() + player.getScore());
         } else {
             players.add(player);
         }
@@ -59,10 +60,11 @@ public class ScoreboardData {
         Collections.sort(players);
     }
 
+    // Prints the top 5
     public String print() {
-        String scoreBoard = "";
+        String scoreBoard = "Top 5\n\n";
 
-        for (int i = players.size() - 1; i >= 0; i--) {
+        for (int i = players.size() - 1, j = 0; j < 5 && i >= 0; i--, j++) {
             scoreBoard += players.get(i).getPName() + " | " + players.get(i).getScore() + "\n";
         }
 
