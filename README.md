@@ -1,6 +1,6 @@
 # Searching Seeds
 
-This proyect is designed to manage a board game with a circular linked list. Recursion, persistence, binary search and ordering are used.
+This project is designed to manage a board game with a circular linked list. Recursion, persistence, binary search and ordering are used.
 
 -------------------------------------------------------------------------------------------------------------------------
 
